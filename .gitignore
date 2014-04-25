@@ -1,0 +1,5 @@
+vendor
+!config/default.json
+config
+public/js
+server/**/*.js
