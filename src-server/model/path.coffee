@@ -1,0 +1,82 @@
+"use strict"
+
+appInfo         = require "../../package.json"
+config          = require "config"
+deferred        = require "deferred"
+uuid            = require "uuid"
+qs              = require "querystring"
+request         = require "request"
+
+dr              = require "../utils/deferred-redis"
+
+module.exports = class Path
+  @getByOrigin: (origin, method = "*", status = "*")->
+    dr("keys", "#{config.prefix or 'snatch'}:path:#{origin}:#{method}:#{status}*")
+    .then((keys)->
+      keys = [keys] unless keys instanceof Array
+      return [] if keys.length is 0
+      deferred.apply(deferred, keys.map((key)->
+        dr("hgetall", key)
+      ))
+    )
+    .then((pathes)->
+      pathes = [pathes] unless pathes instanceof Array
+      pathes
+    , (err)->
+      console.log err
+    )
+
+  constructor: (data)->
+    console.log data
+    @id         = uuid()
+    @origin     = data.origin
+    @path       = data.path
+    @method     = data.method
+    @status     = data.status
+    @request    = @parseRequest(data.request)
+    @response   = @parseResponse(data.response)
+    @comment    = data.comment
+
+  parseRequest: (req)->
+    return unless req
+    body = req.body
+      .replace(/^[\s\n\r\t\b]*|[\s\n\r\t\b]*$/g, "")
+      .replace(/\r\n/g, "&")
+
+    body:       qs.parse(body)
+    header:     req.header
+
+  parseResponse: (res)->
+    return unless res
+
+  exec: ()->
+    params =
+      url:      "#{@origin}#{@path}"
+      proxy:    @proxy
+      method:   @method
+      form:     @request.body
+
+    d = deferred()
+    request params, (err, res, body)->
+      return d.reject(err) if err
+      d.resolve([res.headers, body])
+
+    d.promise
+
+  save: ()->
+    console.log @
+    return new Error("no response") unless @response
+    key = @key()
+    console.log key
+    deferred(
+      dr("hset", key, "id",            @id)
+      dr("hset", key, "origin",        @origin)
+      dr("hset", key, "path",          @path)
+      dr("hset", key, "status",        @status)
+      dr("hset", key, "method",        @method)
+      dr("hset", key, "request",       @request)
+      dr("hset", key, "response",      @response)
+      dr("hset", key, "comment",       @comment)
+    )
+  key: ()->
+    "#{config.prefix or 'snatch'}:path:#{@origin}:#{@method}:#{@status}"
