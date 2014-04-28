@@ -11,28 +11,30 @@ body {
     padding: 0;
     margin: 0;
     border-radius: 5px;
-}
-.text-origin div {
-    vertical-align: middle;
-}
-.text-origin h1 {
-    padding: 0;
-    margin: 10px;
-    font-size: 1.2em;
-    line-height: 1.2em;
-}
-.text-origin a {
-    font-size: 1em;
-    line-height: 2.6em;
-    padding: 0;
-    margin: 0;
+    div {
+        vertical-align: middle;
+    }
+    h1 {
+        padding: 0;
+        margin: 10px;
+        font-size: 1.2em;
+        line-height: 1.2em;
+    }
+    a {
+        font-size: 1em;
+        line-height: 2.6em;
+        padding: 0;
+        margin: 0;
+    }
 }
 
-.label.normal {
-    background: blue;
-}
-.label.abnormal {
-    background: red;
+.label {
+    &.normal {
+        background: blue;
+    }
+    &.abnormal {
+        background: red;
+    }
 }
 
 .pathes {
@@ -43,4 +45,12 @@ body {
 }
 .w100 {
     width: 100px;
+}
+
+.modal-content {
+    &.large {
+        width: 800px;
+        .modal-body {
+        }
+    }
 }

@@ -3,3 +3,4 @@ vendor
 config
 public/js
 server/**/*.js
+*.css
