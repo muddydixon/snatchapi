@@ -6,22 +6,27 @@
     "start": "node app.js"
   },
   "dependencies": {
+    "config": "^0.4.35",
+    "deferred": "~0.7.0",
     "express": "3.4.8",
     "jade": "*",
     "qs": "~0.6.6",
     "redis": "~0.10.1",
     "request": "~2.34.0",
-    "uuid": "~1.4.1",
-    "deferred": "~0.7.0",
-    "series.js": "~0.1.12"
+    "series.js": "~0.1.12",
+    "uuid": "~1.4.1"
   },
   "main": "app.js",
   "author": "",
   "license": "BSD-2-Clause",
   "devDependencies": {
-    "gulp-watch": "~0.6.2",
-    "gulp-util": "~2.2.14",
+    "coffee-script": "~1.7.1",
+    "gulp": "^3.6.2",
     "gulp-coffee": "~1.4.2",
-    "coffee-script": "~1.7.1"
+    "gulp-util": "~2.2.14",
+    "gulp-watch": "~0.6.2",
+    "gulp-plumber": "^0.6.1",
+    "gulp-connect": "^2.0.5",
+    "gulp-less": "^1.2.3"
   }
 }
