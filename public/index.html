@@ -7,7 +7,6 @@
     <script type="text/javascript" src="/vendor/underscore/underscore.js"></script>
     <script type="text/javascript" src="/vendor/backbone/backbone.js"></script>
     <script type="text/javascript" src="/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/vendor/vue/dist/vue.min.js"></script>
     <link rel="stylesheet" href="/stylesheets/app.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css" type="text/css" media="screen" />
   </head>
@@ -23,22 +22,27 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index.html">Snatch API</a>
+            <a class="navbar-brand" href="/">Snatch API</a>
           </div>
           <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav navbar-right">
-              <li><a class="nav-link" href="/origin"><l class="fa fa-plus fa-lg"></i>&nbsp;Add Origin</a></li>
+              <li>
+                <a id="btn-add-origin" href="#" class="nav-link" data-toggle="modal" data-target="#create-origin">
+                  <i class="fa fa-plus fa-lg"></i>&nbsp;
+                  Add Origin
+                </a>
+              </li>
             </ul>
           </div>
         </div>
       </nav>
       <!--index-->
-
-      <div class="index"></div>
-
-      <div id="app">
-      </div>
     </div>
+    <div id="body">
+      <div class="index"></div>
+      <div id="app"></div>
+    </div>
+    <!--modal-->
     <script type="text/javascript" src="/vendor/requirejs/require.js" data-main="/js/app"></script>
   </body>
 </html>
