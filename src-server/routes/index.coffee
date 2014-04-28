@@ -18,109 +18,12 @@ overwrite = (opts...)->
       option[k] = v
   option
 
-
-requestHeader = (req) ->
-  req._header
-
-responseHeader = (res) ->
-  body = []
-  for key, val of res.headers
-    body.push "#{key}: #{val}"
-  body.join "\n"
-
 #
 # ## index
 #
 index =
   get: (req, res) ->
     res.sendfile "public/index.html"
-
-  post: (req, res) ->
-    origin      = req.body.origin
-    path        = req.body.path
-    method      = req.body.method
-    query       = req.body.query
-    body        = req.body.body
-    header      = req.body.header
-    proxy       = req.body.proxy
-
-
-    body        = body
-      .replace(/^[\s\n\r\t\b]*|[\s\n\r\t\b]*$/g, "")
-      .replace(/\r\n/g, "&")
-    bodyObj     = qs.parse(body)
-
-    originObject = Url.parse(origin)
-    unless originObject.protocol and originObject.hostname
-      return res.render("index",
-        title: appInfo.name
-        params: req.body
-      )
-
-    params =
-      url:      origin + path
-      query:    query
-      proxy:    proxy
-      method:   method
-      form:     bodyObj
-
-    request params, (err, reqRes, reqBody) ->
-      return res.render("index",
-        title: appInfo.name
-        params: req.body
-        requestHeader: requestHeader(reqRes.req)
-        responseHeader: responseHeader(reqRes)
-        requestBody: JSON.stringify(bodyObj)
-        responseBody: reqBody
-      )
-
-#
-# ## origin
-#
-origin =
-  get: (req, res) ->
-    res.sendfile "public/origin.html"
-  post: (req, res)->
-    key = "#{config.prefix or 'snatch'}:#{req.body.origin}:path:#{req.body.path}:#{req.body.method}:#{req.body.status}:#{uuid()}"
-
-    body        = req.body.body
-      .replace(/^[\s\n\r\t\b]*|[\s\n\r\t\b]*$/g, "")
-      .replace(/\r\n/g, "&")
-    bodyObj     = qs.parse(body)
-
-    originObject = Url.parse(req.body.origin)
-    unless originObject.protocol and originObject.hostname
-      return res.redirect("/")
-
-    params =
-      url:      req.body.origin + req.body.path
-      proxy:    req.body.proxy
-      method:   req.body.method
-      form:     bodyObj
-
-    resBody     = undefined
-    resHeader   = undefined
-
-    deferred(()->
-      d = deferred()
-      request params, (err, _resRes, _resBody) ->
-        resBody = _resBody
-        return d.reject(err) if err
-        # todo parse
-        d.resolve(reqBody)
-
-      d.promise
-    ).then(
-      dr('hset', key, "reqheader", req.body.header)
-      dr('hset', key, "reqbody", req.body.body)
-      dr('hset', key, "resheader", "")
-      dr('hset', key, "resbody", resBody)
-      dr('hset', key, "comment", req.body.comment)
-    )
-    .then((results)->
-      res.redirect("/")
-    )
-
 
 #
 # ## api
