@@ -2,13 +2,12 @@
 
 appInfo         = require "../../package.json"
 config          = require "config"
-request         = require "request"
 Url             = require "url"
-qs              = require "querystring"
-uuid            = require "uuid"
 deferred        = require "deferred"
 Series          = require "series.js"
 
+Origin          = require "../model/origin"
+Path            = require "../model/path"
 
 # object overwrite
 overwrite = (opts...)->
