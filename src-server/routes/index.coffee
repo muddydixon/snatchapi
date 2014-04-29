@@ -98,6 +98,26 @@ api =
         console.log err
         res.json {error: {code: err.status or 500, message: err.message}}
       )
+  pathId:
+    get: (req, res)->
+    put: (req, res)->
+    delete: (req, res)->
+      Path.get({id: req.params.id})
+      .then(([path])->
+        console.log path
+        unless path
+          err = new Error("path not found for #{req.params.id}")
+          err.status = 404
+          return err
+        path.destroy()
+      )
+      .then((result)->
+        res.json {data: req.params.id}
+      , (err)->
+        res.json {error: {code: err.status or 500, message: err.message}}
+      )
+
+
 
 # routes
 routes = overwrite
@@ -107,6 +127,7 @@ routes = overwrite
   "/api/origin/:id":    api.originId
 
   "/api/path":          api.path
+  "/api/path/:id":      api.pathId
 
 # routing
 module.exports = (app) ->
