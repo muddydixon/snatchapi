@@ -93,9 +93,10 @@ api =
         path.save()
       )
       .then((data)->
-        console.log data
+        res.json {data: path}
       , (err)->
         console.log err
+        res.json {error: {code: err.status or 500, message: err.message}}
       )
 
 # routes
