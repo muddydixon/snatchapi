@@ -10,18 +10,35 @@ request         = require "request"
 dr              = require "../utils/deferred-redis"
 
 module.exports = class Path
-  @getByOrigin: (origin, method = "*", status = "*")->
-    dr("keys", "#{config.prefix or 'snatch'}:path:#{origin}:#{method}:#{status}*")
+  @key: (cond)->
+    key = "#{config.prefix or 'snatch'}:path"
+    for name in ["origin", "method", "status", "id"]
+      key += ":#{cond[name] or '*'}"
+    key
+
+  @get: (cond)->
+    getkey = @key(cond)
+
+    dr("keys", getkey)
     .then((keys)->
       keys = [keys] unless keys instanceof Array
       return [] if keys.length is 0
       deferred.apply(deferred, keys.map((key)->
         dr("hgetall", key)
+        .then((data)->
+          data.request =
+            header:     data["request:header"]
+            body:       data["request:header"]
+          data.response =
+            header:     data["response:header"]
+            body:       data["response:header"]
+          data
+        )
       ))
     )
     .then((pathes)->
       pathes = [pathes] unless pathes instanceof Array
-      pathes
+      pathes.map((path)-> new Path(path))
     , (err)->
       console.log err
     )

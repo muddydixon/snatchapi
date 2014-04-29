@@ -22,7 +22,7 @@ module.exports = class Origin
           origin = values
         )
         .then((origin)->
-          Path.getByOrigin(origin.origin)
+          Path.get(origin: origin.origin)
         )
         .then((pathes)->
           origin.pathes = pathes
