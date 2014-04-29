@@ -44,8 +44,7 @@ module.exports = class Path
     )
 
   constructor: (data)->
-    console.log data
-    @id         = uuid()
+    @id         = data.id or uuid()
     @origin     = data.origin
     @path       = data.path
     @method     = data.method
