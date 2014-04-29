@@ -81,7 +81,6 @@ api =
         console.log err
         res.json {error: {code: err.stats or 500, message: err.message}}
       )
-
   originId: {}
   path:
     get: (req, res)->

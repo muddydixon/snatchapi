@@ -99,4 +99,4 @@ module.exports = class Path
 
 
   key: ()->
-    "#{config.prefix or 'snatch'}:path:#{@origin}:#{@method}:#{@status}"
+    "#{config.prefix or 'snatch'}:path:#{@origin}:#{@method}:#{@status}:#{@id}"
