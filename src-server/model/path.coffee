@@ -80,19 +80,19 @@ module.exports = class Path
     d.promise
 
   save: ()->
-    console.log @
     return new Error("no response") unless @response
     key = @key()
-    console.log key
     deferred(
       dr("hset", key, "id",            @id)
       dr("hset", key, "origin",        @origin)
       dr("hset", key, "path",          @path)
       dr("hset", key, "status",        @status)
       dr("hset", key, "method",        @method)
-      dr("hset", key, "request",       @request)
-      dr("hset", key, "response",      @response)
       dr("hset", key, "comment",       @comment)
+      dr("hset", key, "request:header",  @request.header)
+      dr("hset", key, "request:body",    @request.body)
+      dr("hset", key, "response:header", @response.header)
+      dr("hset", key, "response:body",   @response.body)
     )
   key: ()->
     "#{config.prefix or 'snatch'}:path:#{@origin}:#{@method}:#{@status}"
