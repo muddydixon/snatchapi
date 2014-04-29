@@ -94,5 +94,9 @@ module.exports = class Path
       dr("hset", key, "response:header", @response.header)
       dr("hset", key, "response:body",   @response.body)
     )
+  destroy: ()->
+    dr("del", @key())
+
+
   key: ()->
     "#{config.prefix or 'snatch'}:path:#{@origin}:#{@method}:#{@status}"
