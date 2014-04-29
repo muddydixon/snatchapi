@@ -22,11 +22,10 @@ define (require)->
       @pathModalView   = new PathModalView(Path)
 
     render: ->
+      pathModalView = @pathModalView
       @originModalView.render()
       @pathModalView.render()
       $(@el).append '<div class="container origins"></div>'
-      @collection.each (origin)=>
-        $(@container).append new OriginView(model: origin).render()
 
     appendItem: (origin)=>
-      $(@container).append new OriginView(model: origin).render()
+      $(@container).append new OriginView(model: origin, pathModalView: @pathModalView).render()

@@ -63,6 +63,9 @@ define (require)->
           </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
       """
+
+    initialize: (@Model, @collection)->
+
     render: ()->
       $(@container).append $(@el).html @template()
 
@@ -81,8 +84,10 @@ define (require)->
 
       path      = new Path({origin, path, method, status, request: {header, body}, comment})
       console.log path
-
-      path.save().then (res)->
-        console.log res
+      console.log @collection
+      console.log @el
+      path.save().then (res)=>
+        @collection.add new @Model(res.data)
+        $(@el).modal("hide")
       , (err)->
         console.log err

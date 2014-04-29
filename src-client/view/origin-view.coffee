@@ -1,7 +1,8 @@
 define (require)->
   "use strict"
 
-  PathView = require "./path-view"
+  Pathes        = require "../model/pathes"
+  PathView      = require "./path-view"
 
   class OriginView extends Backbone.View
     container: ".origins"
@@ -34,17 +35,30 @@ define (require)->
         <tbody class='pathes'></tbody>
       </table>
       """
+    Collection: Pathes
+    initialize: (options)->
+      @pathModalView = options.pathModalView if options.pathModalView
+
+      @collection = new @Collection
+      @collection.bind "add", @appendItem
+
+      if @model.get("pathes")
+        @model.get("pathes").each (path)=>
+          @collection.add path
 
     render: ->
       $(@container).append $(@el).html(@template @model).attr(id: @model.id)
-      pathes = @model.get("pathes")
-      if pathes
-        pathes.each (path)=>
-          $(@el).find(".pathes").append new PathView(model: path).render()
       @el
 
     events:
-      "click [data-toggle='modal']": "passOriginId"
+      "click [data-toggle='modal']": "callPathModal"
 
-    passOriginId: ()->
+    callPathModal: ()->
       $("#create-request [name='origin']").val(@model.get "origin")
+      @pathModalView.collection = @collection
+
+    appendItem: (path)=>
+      setTimeout ()=>
+        pathEl = new PathView(model: path).render()
+        $(@el).find(".pathes").append new PathView(model: path).render()
+      , 1

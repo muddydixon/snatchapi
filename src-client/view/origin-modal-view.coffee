@@ -53,6 +53,6 @@ define (require)->
       origin = new Origin(origin: origin, proxy: proxy)
       origin.save().then (res)=>
         @collection.add new @Model(res.data)
-        $(".modal").modal("hide")
+        $(@el).modal("hide")
       , (err)->
         console.log err

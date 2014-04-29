@@ -10,4 +10,5 @@ define (require)->
       request:  undefined
       response: undefined
     urlRoot:  "/api/path"
-    initialize: ->
+    initialize: (options)->
+      console.log @, options

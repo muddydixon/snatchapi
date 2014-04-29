@@ -12,9 +12,23 @@ define (require)->
         <span class='label #{if path.get('status') is 'Normal' then 'label-success' else 'label-danger'}'>#{path.get 'status'}</span></td>
       <td>#{path.get('comment') or ''}</td>
       <td class='text-right'>
-        <a href='#'><li class='fa fa-pencil'></li></a>&nbsp;
-        <a href='#'><li class='fa fa-trash-o'></li></a>
+        <a href='#' class='detail'><i class='fa fa-table'></i></a>&nbsp;
+        <a href='#' class='edit'><i class='fa fa-gear'></i></a>&nbsp;
+        <a href='#' class='delete'><i class='fa fa-trash-o'></i></a>
       </td>
       """
     render: ->
       $(@el).html @template @model
+      $(@el)
+
+    events:
+      "click .delete": ()->
+        @model.destroy()
+        .then((res)=>
+          $(@el).remove()
+        , (err)->
+          console.log err
+        )
+      "click .detail": ()->
+        console.log @model
+      "click .edit": ()->
