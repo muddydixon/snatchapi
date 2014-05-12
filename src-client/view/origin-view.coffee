@@ -24,16 +24,7 @@ define (require)->
           </a>
         </div>
       </div>
-      <table class='table'>
-        <colgroup>
-          <col width='30%'>
-          <col width='10%'>
-          <col width='10%'>
-          <col width='40%'>
-          <col width='10%'>
-        </colgroup>
-        <tbody class='pathes'></tbody>
-      </table>
+      <div class='pathes'></div>
       """
     Collection: Pathes
     initialize: (options)->

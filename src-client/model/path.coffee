@@ -7,8 +7,11 @@ define (require)->
       method:   "GET"
       status:   "Normal"
       comment:  ""
-      request:  undefined
-      response: undefined
+      request:
+        header: undefined
+        body:   undefined
+      response:
+        header: undefined
+        body:   undefined
     urlRoot:  "/api/path"
     initialize: (options)->
-      console.log @, options

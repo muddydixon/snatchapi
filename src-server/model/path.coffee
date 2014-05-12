@@ -9,6 +9,12 @@ request         = require "request"
 
 dr              = require "../utils/deferred-redis"
 
+parse   = (str)->
+  try
+    JSON.parse str
+  catch err
+    str
+
 module.exports = class Path
   @key: (cond)->
     key = "#{config.prefix or 'snatch'}:path"
@@ -27,11 +33,11 @@ module.exports = class Path
         dr("hgetall", key)
         .then((data)->
           data.request =
-            header:     data["request:header"]
-            body:       data["request:header"]
+            header:     parse data["request:header"]
+            body:       parse data["request:body"]
           data.response =
-            header:     data["response:header"]
-            body:       data["response:header"]
+            header:     parse data["response:header"]
+            body:       parse data["response:body"]
           data
         )
       ))
@@ -49,33 +55,26 @@ module.exports = class Path
     @path       = data.path
     @method     = data.method
     @status     = data.status
-    @request    = @parseRequest(data.request)
-    @response   = @parseResponse(data.response)
     @comment    = data.comment
-
-  parseRequest: (req)->
-    return unless req
-    body = req.body
-      .replace(/^[\s\n\r\t\b]*|[\s\n\r\t\b]*$/g, "")
-      .replace(/\r\n/g, "&")
-
-    body:       qs.parse(body)
-    header:     req.header
-
-  parseResponse: (res)->
-    return unless res
+    @request    = data.request or {}
+    @response   = data.response or {}
 
   exec: ()->
+    csrf = @withCsrf() if @csrfName
     params =
-      url:      "#{@origin}#{@path}"
+      uri:      "#{@origin}#{@path}"
       proxy:    @proxy
       method:   @method
       form:     @request.body
+      json:     true
 
     d = deferred()
     request params, (err, res, body)->
       return d.reject(err) if err
-      d.resolve([res.headers, body])
+      d.resolve([
+        res.headers,
+        parse(body)
+      ])
 
     d.promise
 
@@ -89,14 +88,13 @@ module.exports = class Path
       dr("hset", key, "status",        @status)
       dr("hset", key, "method",        @method)
       dr("hset", key, "comment",       @comment)
-      dr("hset", key, "request:header",  @request.header)
-      dr("hset", key, "request:body",    @request.body)
-      dr("hset", key, "response:header", @response.header)
-      dr("hset", key, "response:body",   @response.body)
+      dr("hset", key, "request:header",  JSON.stringify @request.header)
+      dr("hset", key, "request:body",    JSON.stringify @request.body)
+      dr("hset", key, "response:header", JSON.stringify @response.header)
+      dr("hset", key, "response:body",   JSON.stringify @response.body)
     )
   destroy: ()->
     dr("del", @key())
-
 
   key: ()->
     "#{config.prefix or 'snatch'}:path:#{@origin}:#{@method}:#{@status}:#{@id}"

@@ -85,7 +85,23 @@ api =
   path:
     get: (req, res)->
     post: (req, res)->
-      path = new Path(req.body)
+      header = {}
+      body   = {}
+      req.body.request.header.split("\n").map((params)-> [key, val] = params.split("="); header[key] = val)
+      req.body.request.body.split("\n").map((params)-> [key, val] = params.split("="); body[key] = val)
+
+      request =
+        header: header
+        body:   body
+
+      path = new Path(
+        origin:         req.body.origin
+        path:           req.body.path
+        method:         req.body.method
+        status:         req.body.status
+        comment:        req.body.comment
+        request:        {header, body}
+      )
 
       path.exec()
       .then(([header, body])->
@@ -104,7 +120,6 @@ api =
     delete: (req, res)->
       Path.get({id: req.params.id})
       .then(([path])->
-        console.log path
         unless path
           err = new Error("path not found for #{req.params.id}")
           err.status = 404

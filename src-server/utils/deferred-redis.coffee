@@ -12,14 +12,6 @@ redis.on "error", (err)->
   console.log "require redis server"
   process.exit -1
 
-redis = Redis.createClient(
-  config.redis?.port or 6379
-  config.redis?.host or "localhost"
-)
-redis.on "error", (err)->
-  console.log "require redis server"
-  process.exit -1
-
 module.exports = dr = (method, args...)->
   d = deferred()
   args.push (err, res)->
