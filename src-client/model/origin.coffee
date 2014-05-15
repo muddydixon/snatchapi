@@ -7,6 +7,7 @@ define (require)->
     default:
       origin: ""
       pathes: []
+      port:   8031
     urlRoot:  "/api/origin"
     initialize: ->
       @set 'pathes', new Pathes(@get 'pathes') if @get 'pathes'

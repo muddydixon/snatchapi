@@ -23,6 +23,12 @@ gulp.task "coffee:client", ->
   .pipe(coffee({bare: true})).on("error", util.log)
   .pipe(gulp.dest("./public/js"))
 
+gulp.task "coffee:bin", ->
+  gulp.src("./src-bin/**/*.coffee")
+  .pipe(plumber())
+  .pipe(coffee({bare: true})).on("error", util.log)
+  .pipe(gulp.dest("./bin"))
+
 gulp.task "less", ->
   gulp.src("./src-client/asset/less/*.less")
   .pipe(plumber())
@@ -42,6 +48,6 @@ gulp.task "watch", [ "watch:server", "watch:client" ]
 gulp.task "test" , ->
 
 # default
-gulp.task "build", [ "coffee:server", "coffee:client", "less" ]
+gulp.task "build", [ "coffee:server", "coffee:client", "coffee:bin", "less" ]
 
 gulp.task "default", ["build", "test"]

@@ -30,7 +30,7 @@ define (require)->
               <tr><th class='text-center' colspan='2'>request header</th></tr>
               """ +
               (for k, v of (path.get('request').header or {})
-                "<tr><td>#{k}</td><td>#{v}</td></tr>"
+                "<tr><td>#{k}</td><td class='word-break'>#{v}</td></tr>"
               ).join("\n") +
               """
            </table>
@@ -40,17 +40,34 @@ define (require)->
              <tr><th class='text-center' colspan='2'>response header</th></tr>
               """ +
               (for k, v of (path.get('response').header or {})
-                "<tr><td>#{k}</td><td>#{v}</td></tr>"
+                "<tr><td>#{k}</td><td class='word-break'>#{v}</td></tr>"
               ).join("\n") +
               """
             </table>
           </div>
         </div>
         <div class='row bodies'>
-          <div class='col-md-6'>#{JSON.stringify(path.get('request').body or '')}</div>
-          """ +
-          $("<div>", {class: 'col-md-6'}).text(JSON.stringify(path.get('response').body or '')).html() +
-          """
+          <div class='col-md-6'>
+            <h5 class='text-center'>request body</h5>
+            <textarea class='col-md-12' rows='6'>""" +
+              (try
+                JSON.stringify(path.get('request').body)
+              catch err
+                path.get('request').body
+              ).replace(/^[\s]*|[\s]*$/mg, '') +
+            """
+            </textarea>
+          </div>
+          <div class='col-md-6'>
+            <h5 class='text-center'>response body</h5>
+            <textarea class='col-md-12' rows='6'>""" +
+              (try
+                JSON.stringify(path.get('response').body)
+              catch err
+                path.get('response').body
+              ).replace(/^[\s]*|[\s]*$/mg, '') +
+            """
+            </textarea>
           </div>
         </div>
       </div>
@@ -63,7 +80,7 @@ define (require)->
       "click a.delete": ()->
         @model.destroy()
         .then((res)=>
-          $(@el).remove()
+          @$el.remove()
         , (err)->
           console.log err
         )

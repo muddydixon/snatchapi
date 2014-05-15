@@ -81,9 +81,6 @@ define (require)->
       comment   = $(@el).find("form [name=comment]").val()
 
       path      = new Path({origin, path, method, status, request: {header, body}, comment})
-      console.log path
-      console.log @collection
-      console.log @el
       path.save().then (res)=>
         @collection.add new @Model(res.data)
         $(@el).modal("hide")

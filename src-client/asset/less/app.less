@@ -5,29 +5,17 @@ body {
   /*font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif; */
 }
 
-.text-origin {
-    border: 1px solid #EEE;
-    background: #EEE;
-    padding: 0;
-    margin: 0;
-    border-radius: 5px;
-    div {
-        vertical-align: middle;
-    }
-    h1 {
-        padding: 0;
-        margin: 10px;
-        font-size: 1.2em;
-        line-height: 1.2em;
-    }
-    a {
-        font-size: 1em;
-        line-height: 2.6em;
-        padding: 0;
-        margin: 0;
-    }
+/* size style */
+.w60 {
+    width: 60px;
+}
+.w100 {
+    width: 100px;
 }
 
+/* color style */
+
+/* common style */
 .label {
     &.normal {
         background: blue;
@@ -37,17 +25,51 @@ body {
     }
 }
 
+.word-break {
+    word-break: break-all;
+}
+
+/* origin style */
+.origin {
+    .header {
+        border: 1px solid #EEE;
+        background: #EEE;
+        padding: 0;
+        margin: 0;
+        border-radius: 5px;
+
+        div {
+            vertical-align: middle;
+        }
+        h1 {
+            padding: 0;
+            margin: 10px;
+            font-size: 1.2em;
+            line-height: 1.2em;
+        }
+        a {
+            font-size: 1em;
+            line-height: 2.6em;
+            padding: 0;
+            margin: 0;
+        }
+    }
+}
+
+
+/* path style */
 .pathes {
     margin: 5px 10px;
+
+    .path {
+        textarea {
+            border-radius: 5px;
+            border: 1px solid #CCC;
+        }
+    }
 }
 
-.w60 {
-    width: 60px;
-}
-.w100 {
-    width: 100px;
-}
-
+/* modal style */
 .modal-content {
     &.large {
         width: 800px;

@@ -14,4 +14,3 @@ define (require)->
         header: undefined
         body:   undefined
     urlRoot:  "/api/path"
-    initialize: (options)->

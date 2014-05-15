@@ -2,8 +2,9 @@ define (require)->
   "use strict"
 
   Origin        = require "../model/origin"
+  View          = require "./base-view"
 
-  class OriginModalView extends Backbone.View
+  class OriginModalView extends View
     container:          "#body"
     tagName:            "div"
     attributes:
@@ -28,6 +29,11 @@ define (require)->
                   <span class='input-group-addon'>proxy</span>
                   <input type='text' class='form-control' name='proxy' placeholder='http://proxy.example.com:8080'>
                 </div>
+                <br/>
+                <div class='input-group'>
+                  <span class='input-group-addon'>&nbsp;port&nbsp;</span>
+                  <input type='text' class='form-control' name='port' placeholder='8031'>
+                </div>
               </div>
               <div class='modal-footer'>
                 <button type='button' class='btn submit btn-default' data-dismiss='modal'>Close</button>
@@ -49,10 +55,11 @@ define (require)->
       ev.preventDefault()
       origin = $(@el).find("form [name=origin]").val()
       proxy  = $(@el).find("form [name=proxy]").val()
+      port   = $(@el).find("form [name=port]").val()
 
-      origin = new Origin(origin: origin, proxy: proxy)
+      origin = new Origin(origin: origin, proxy: proxy, port: port)
       origin.save().then (res)=>
         @collection.add new @Model(res.data)
-        $(@el).modal("hide")
+        @$el.modal("hide")
       , (err)->
         console.log err

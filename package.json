@@ -2,9 +2,28 @@
   "name": "snatchapi",
   "version": "0.0.1",
   "private": true,
+  "main": "index.js",
+  "author": {
+    "name": "muddydixon",
+    "email": "muddydixon@gmail.com"
+  },
+  "description": "Snatching API Server for test",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:muddydixon/snatchapi.git"
+  },
+  "keywords": [
+    "api",
+    "test"
+  ],
+  "license": "Apache License Version 2.0",
   "scripts": {
     "start": "node app.js"
   },
+  "bin": {
+    "snatch-api": "./bin/snatch-api.js"
+  },
+  "readmeFileName": "README.md",
   "dependencies": {
     "config": "^0.4.35",
     "deferred": "~0.7.0",
@@ -14,11 +33,10 @@
     "redis": "~0.10.1",
     "request": "~2.34.0",
     "series.js": "~0.1.12",
-    "uuid": "~1.4.1"
+    "uuid": "~1.4.1",
+    "commander": "~2.2.0",
+    "mkdirp": "~0.3.5"
   },
-  "main": "app.js",
-  "author": "",
-  "license": "BSD-2-Clause",
   "devDependencies": {
     "coffee-script": "~1.7.1",
     "gulp": "^3.6.2",
@@ -27,6 +45,8 @@
     "gulp-watch": "~0.6.2",
     "gulp-plumber": "^0.6.1",
     "gulp-connect": "^2.0.5",
-    "gulp-less": "^1.2.3"
+    "gulp-less": "^1.2.3",
+    "chai": "~1.9.1",
+    "mocha": "~1.18.2"
   }
 }
